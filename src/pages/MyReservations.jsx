@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import useUserStore from "../store/userStore";
 import { getToken } from "../services/AuthService";
 import { toast } from "react-toastify";
@@ -13,17 +14,12 @@ function MyReservations() {
     const fetchReservations = async () => {
       try {
         const token = getToken();
-        const response = await fetch("http://localhost:3000/api/bookings/user", {
+        const response = await axios.post("http://localhost:8000/api/booking/list", {}, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            "access-token": token,
           },
         });
-        if (response.ok) {
-          const data = await response.json();
-          setReservations(data);
-        } else {
-          toast.error("Failed to fetch reservations");
-        }
+        setReservations(response.data.data.allBookings);
       } catch (error) {
         console.error("Error fetching reservations:", error);
         toast.error("Error fetching reservations");
@@ -40,12 +36,12 @@ function MyReservations() {
   const now = new Date();
 
   const openReservations = reservations.filter((reservation) => {
-    const reservationDate = new Date(reservation.date);
+    const reservationDate = new Date(reservation.startDate);
     return reservationDate >= now && reservation.status !== "completed";
   });
 
   const pastReservations = reservations.filter((reservation) => {
-    const reservationDate = new Date(reservation.date);
+    const reservationDate = new Date(reservation.startDate);
     return reservationDate < now || reservation.status === "completed";
   });
 
@@ -64,7 +60,7 @@ function MyReservations() {
         <div className="bg-gray-100 rounded-lg p-1 flex">
           <button
             onClick={() => setActiveTab("open")}
-            className={`px-6 py-2 rounded-md font-medium transition-colors ${
+            className={`px-6 py-2 rounded-md font-medium transition-colors text-nowrap ${
               activeTab === "open"
                 ? "bg-[#b4e172] text-[#1a475b]"
                 : "text-gray-600 hover:bg-gray-200"
@@ -74,7 +70,7 @@ function MyReservations() {
           </button>
           <button
             onClick={() => setActiveTab("past")}
-            className={`px-6 py-2 rounded-md font-medium transition-colors ${
+            className={`px-6 py-2 rounded-md font-medium transition-colors text-nowrap ${
               activeTab === "past"
                 ? "bg-[#b4e172] text-[#1a475b]"
                 : "text-gray-600 hover:bg-gray-200"
@@ -96,9 +92,12 @@ function MyReservations() {
               key={reservation.id}
               className="border border-gray-200 rounded-lg p-4"
             >
-              <h3 className="font-semibold">{reservation.packageName}</h3>
+              <h3 className="font-semibold">{reservation.airport}</h3>
               <p className="text-sm text-gray-600">
-                Date: {new Date(reservation.date).toLocaleDateString()}
+                Start Date: {new Date(reservation.startDate).toLocaleDateString()}
+              </p>
+              <p className="text-sm text-gray-600">
+                End Date: {new Date(reservation.endDate).toLocaleDateString()}
               </p>
               <p className="text-sm text-gray-600">
                 Status: {reservation.status}

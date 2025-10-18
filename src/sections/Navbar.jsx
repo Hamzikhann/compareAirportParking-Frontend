@@ -30,6 +30,7 @@ function Navbar() {
   const handleLogout = () => {
     logOut();
     clearSession();
+    navigate("/");
   };
 
   const handleAccountOption = (option) => {
@@ -52,7 +53,7 @@ function Navbar() {
 
   return (
     <>
-      <div className="bg-white shadow-md flex items-center justify-between gap-12 py-4 px-14">
+      <div className="bg-white shadow-md flex items-center justify-between gap-12 py-4 px-4 sm:px-14">
         <Link to="/">
           {" "}
           <img className="w-auto" src={logo} alt="Logo" />
@@ -89,7 +90,7 @@ function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setAccountDropdownOpen(!accountDropdownOpen)}
-                  className="flex items-center gap-2 bg-[#b4e172] border border-[#b4e172] text-[#1a475b] py-2 px-4 rounded-md hover:bg-[#a3d66a]"
+                  className="flex text-nowrap items-center gap-2 bg-[#b4e172] border border-[#b4e172] text-[#1a475b] py-2 px-4 rounded-md hover:bg-[#a3d66a]"
                 >
                   My account
                   <IoIosArrowDown
