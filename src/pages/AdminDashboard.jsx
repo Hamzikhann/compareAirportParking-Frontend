@@ -22,10 +22,42 @@ import {
   logOut as clearSession,
 } from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
+import ApiServices from "../services/ApiServices";
 
 const AdminDashboard = () => {
   const { user, isLoggedIn, logOut, setUser } = useUserStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [bookingData, setBookingData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await ApiServices.postRequest({
+          path: "booking/list",
+          payload: {}
+        });
+        if (response?.data?.data?.allBookings) {
+          const bookings = response.data.data.allBookings.map((booking) => ({
+            id: booking.id,
+            startDate: booking.startDate,
+            endDate: booking.endDate,
+            startTime: booking.startTime || "N/A",
+            endTime: booking.endTime || "N/A",
+            airport: booking.airport,
+            status: booking.status
+          }));
+          setBookingData(bookings);
+        }
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, []);
 
   const statsData = [
     {
@@ -105,35 +137,7 @@ const AdminDashboard = () => {
     }, 100);
   };
 
-  const bookingData = [
-    {
-      id: "BK001",
-      startDate: "2025-10-01",
-      endDate: "2025-10-03",
-      startTime: "10:00 AM",
-      endTime: "04:00 PM",
-      airport: "JFK",
-      status: "Completed",
-    },
-    {
-      id: "BK002",
-      startDate: "2025-10-05",
-      endDate: "2025-10-06",
-      startTime: "12:00 PM",
-      endTime: "06:00 PM",
-      airport: "LAX",
-      status: "Inprogress",
-    },
-    {
-      id: "BK003",
-      startDate: "2025-10-08",
-      endDate: "2025-10-10",
-      startTime: "09:00 AM",
-      endTime: "05:00 PM",
-      airport: "SFO",
-      status: "Cancelled",
-    },
-  ];
+
 
   const columns = [
     { name: "Booking ID", selector: (row) => row.id, sortable: true },
@@ -441,38 +445,45 @@ const AdminDashboard = () => {
           All Bookings
         </h1>
         <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-          <DataTable
-            columns={columns}
-            data={bookingData}
-            customStyles={customStyles}
-            pagination
-            highlightOnHover
-            pointerOnHover
-            responsive
-            noDataComponent={
-              <div className="py-8 text-center">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1}
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                  />
-                </svg>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">
-                  No bookings found
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  No bookings available
-                </p>
-              </div>
-            }
-          />
+          {loading ? (
+            <div className="py-8 text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+              <p className="mt-2 text-sm text-gray-500">Loading bookings...</p>
+            </div>
+          ) : (
+            <DataTable
+              columns={columns}
+              data={bookingData}
+              customStyles={customStyles}
+              pagination
+              highlightOnHover
+              pointerOnHover
+              responsive
+              noDataComponent={
+                <div className="py-8 text-center">
+                  <svg
+                    className="mx-auto h-12 w-12 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                    />
+                  </svg>
+                  <h3 className="mt-2 text-sm font-medium text-gray-900">
+                    No bookings found
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    No bookings available
+                  </p>
+                </div>
+              }
+            />
+          )}
         </div>
       </section>
     </div>
