@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   PieChart,
   Pie,
@@ -17,18 +17,19 @@ import { LuView } from "react-icons/lu";
 import DataTable from "react-data-table-component";
 import useUserStore from "../store/userStore";
 import {
-  getToken,
-  getSessionUser,
   logOut as clearSession,
 } from "../services/AuthService";
-import { useNavigate } from "react-router-dom";
 import ApiServices from "../services/ApiServices";
 
 const AdminDashboard = () => {
-  const { user, isLoggedIn, logOut, setUser } = useUserStore();
+  const { logOut } = useUserStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [bookingData, setBookingData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [statsData, setStatsData] = useState([]);
+  const [pieData, setPieData] = useState([]);
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [errorStats, setErrorStats] = useState(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -56,50 +57,77 @@ const AdminDashboard = () => {
       }
     };
 
+    const fetchDashboardData = async () => {
+      try {
+        setLoadingStats(true);
+        setErrorStats(null);
+        const response = await ApiServices.postRequest({
+          path: "dashboard",
+          payload: {}
+        });
+        if (response?.data?.success && response.data.data) {
+          const { stats, userDistribution } = response.data.data;
+
+          const formattedStats = [
+            {
+              title: "Total Users",
+              value: stats.totalUsers.toString(),
+              change: `${stats.changes.totalUsers >= 0 ? '+' : ''}${stats.changes.totalUsers}%`,
+              isPositive: stats.changes.totalUsers >= 0,
+              color: "bg-blue-500",
+              textColor: "text-blue-600",
+            },
+            {
+              title: "Total Bookings",
+              value: stats.totalBookings.toString(),
+              change: `${stats.changes.totalBookings >= 0 ? '+' : ''}${stats.changes.totalBookings}%`,
+              isPositive: stats.changes.totalBookings >= 0,
+              color: "bg-green-500",
+              textColor: "text-green-600",
+            },
+            {
+              title: "Total Payments",
+              value: `$${stats.totalPayments}`,
+              change: `${stats.changes.totalPayments >= 0 ? '+' : ''}${stats.changes.totalPayments}%`,
+              isPositive: stats.changes.totalPayments >= 0,
+              color: "bg-purple-500",
+              textColor: "text-purple-600",
+            },
+            {
+              title: "Pending Requests",
+              value: stats.pendingRequests.toString(),
+              change: `${stats.changes.pendingRequests >= 0 ? '+' : ''}${stats.changes.pendingRequests}%`,
+              isPositive: stats.changes.pendingRequests >= 0,
+              color: "bg-orange-500",
+              textColor: "text-orange-600",
+            },
+          ];
+
+          // Format pie data for user distribution
+          const formattedPieData = [
+            { name: "Active Users", value: userDistribution.active },
+            { name: "New Users", value: userDistribution.new },
+            { name: "Inactive Users", value: userDistribution.inactive },
+          ];
+
+          setStatsData(formattedStats);
+          setPieData(formattedPieData);
+        } else {
+          throw new Error("Invalid response format");
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        setErrorStats("Failed to load dashboard data");
+      } finally {
+        setLoadingStats(false);
+      }
+    };
+
     fetchBookings();
+    fetchDashboardData();
   }, []);
 
-  const statsData = [
-    {
-      title: "Total Users",
-      value: "12,584",
-      change: "+12.5%",
-      isPositive: true,
-      color: "bg-blue-500",
-      textColor: "text-blue-600",
-    },
-    {
-      title: "Total Bookings",
-      value: "3,247",
-      change: "+8.2%",
-      isPositive: true,
-      color: "bg-green-500",
-      textColor: "text-green-600",
-    },
-    {
-      title: "Payments Clear",
-      value: "$42,580",
-      change: "+15.3%",
-      isPositive: true,
-      color: "bg-purple-500",
-      textColor: "text-purple-600",
-    },
-    {
-      title: "Pending Requests",
-      value: "42",
-      change: "-5.7%",
-      isPositive: false,
-      color: "bg-orange-500",
-      textColor: "text-orange-600",
-    },
-  ];
 
-  const pieData = [
-    { name: "Active Users", value: 400 },
-    { name: "New Users", value: 300 },
-    { name: "Inactive Users", value: 200 },
-    { name: "Suspended", value: 100 },
-  ];
 
   const COLORS = ["#3B82F6", "#10B981", "#8B5CF6", "#F59E0B"];
 
@@ -313,46 +341,69 @@ const AdminDashboard = () => {
       <main className="w-full px-4 sm:px-6 lg:px-12 py-12">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-          {statsData.map((stat, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wide">
-                  {stat.title}
-                </h3>
-                <div
-                  className={`w-10 h-10 rounded-lg ${stat.color} flex items-center justify-center`}
-                >
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                    />
-                  </svg>
+          {loadingStats ? (
+            Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-pulse"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="h-4 bg-gray-200 rounded w-24"></div>
+                  <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
                 </div>
+                <div className="flex items-baseline justify-between">
+                  <div className="h-8 bg-gray-200 rounded w-16"></div>
+                  <div className="h-4 bg-gray-200 rounded w-12"></div>
+                </div>
+                <div className="h-3 bg-gray-200 rounded w-20 mt-2"></div>
               </div>
-              <div className="flex items-baseline justify-between">
-                <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                <span
-                  className={`text-sm font-medium ${
-                    stat.isPositive ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {stat.change}
-                </span>
-              </div>
-              <p className="text-xs text-gray-400 mt-2">From last month</p>
+            ))
+          ) : errorStats ? (
+            <div className="col-span-full bg-red-50 border border-red-200 rounded-xl p-6">
+              <p className="text-red-600 text-center">{errorStats}</p>
             </div>
-          ))}
+          ) : (
+            statsData.map((stat, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wide">
+                    {stat.title}
+                  </h3>
+                  <div
+                    className={`w-10 h-10 rounded-lg ${stat.color} flex items-center justify-center`}
+                  >
+                    <svg
+                      className="w-5 h-5 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                  <span
+                    className={`text-sm font-medium ${
+                      stat.isPositive ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {stat.change}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-400 mt-2">From last month</p>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Charts Section */}
@@ -363,31 +414,41 @@ const AdminDashboard = () => {
               User Distribution
             </h2>
             <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    label={({ name, percent }) =>
-                      `${name} ${(percent * 100).toFixed(0)}%`
-                    }
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+              {loadingStats ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+                </div>
+              ) : errorStats ? (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-red-600">{errorStats}</p>
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                      label={({ name, percent }) =>
+                        `${name} ${(percent * 100).toFixed(0)}%`
+                      }
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
 
