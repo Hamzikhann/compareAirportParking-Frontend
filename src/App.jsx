@@ -1,48 +1,63 @@
-import React, { useState } from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Home from "./pages/Home";
-import Packages from "./pages/Packages";
-import PackageDetails from "./pages/PackageDetails";
-import CheckOut from "./pages/CheckOut";
-import Confirmation from "./pages/Confirmation";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Payment from "./pages/Payment";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminLogin from "./pages/AdminLogin";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Customer from "./pages/Customer";
+
+// Lazy load components for code splitting
+const Home = lazy(() => import("./pages/Home"));
+const Packages = lazy(() => import("./pages/Packages"));
+const PackageDetails = lazy(() => import("./pages/PackageDetails"));
+const CheckOut = lazy(() => import("./pages/CheckOut"));
+const Confirmation = lazy(() => import("./pages/Confirmation"));
+const Payment = lazy(() => import("./pages/Payment"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const Customer = lazy(() => import("./pages/Customer"));
+const HowItWorks = lazy(() => import("./pages/HowItWorks"));
+const About = lazy(() => import("./pages/About"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
+
+// Loading component
+const LoadingSpinner = () => (
+	<div className="min-h-screen flex items-center justify-center">
+		<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b4e172]"></div>
+	</div>
+);
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/adminLogin" element={<AdminLogin />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/" element={<Home />} />
-          <Route path="/packages" element={<Packages />} />
-          <Route path="/package-details" element={<PackageDetails />} />
-          <Route path="/checkout" element={<CheckOut />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/confirmation" element={<Confirmation />} />
-          <Route path="/customer" element={<Customer />} />
-          <Route path="/customer/profile" element={<Customer />} />
-        </Routes>
-      </Router>
-      <ToastContainer position="top-center" autoClose={2000} />
-    </>
-  );
+	return (
+		<>
+			<Router>
+				<Suspense fallback={<LoadingSpinner />}>
+					<Routes>
+						<Route path="/adminLogin" element={<AdminLogin />} />
+						<Route
+							path="/admin"
+							element={
+								<ProtectedRoute>
+									<AdminDashboard />
+								</ProtectedRoute>
+							}
+						/>
+						<Route path="/" element={<Home />} />
+						<Route path="/packages" element={<Packages />} />
+						<Route path="/package-details" element={<PackageDetails />} />
+						<Route path="/checkout" element={<CheckOut />} />
+						<Route path="/payment" element={<Payment />} />
+						<Route path="/confirmation" element={<Confirmation />} />
+						<Route path="/customer" element={<Customer />} />
+						<Route path="/customer/profile" element={<Customer />} />
+						<Route path="/how-it-works" element={<HowItWorks />} />
+						<Route path="/about" element={<About />} />
+						<Route path="/contact-us" element={<ContactUs />} />
+					</Routes>
+				</Suspense>
+			</Router>
+			<ToastContainer position="top-center" autoClose={2000} />
+		</>
+	);
 }
 
 export default App;
