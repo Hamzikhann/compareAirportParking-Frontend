@@ -21,10 +21,12 @@ const ApiService = {
     }
   },
 
-  getRequest: async (path = "") => {
+  getRequest: async (path) => {
+    axios.defaults.headers.common["access-token"] = getToken();
+
     try {
       const response = await axios.get(`${ApiService.baseurl}${path}`);
-      return response.data;
+      return response;
     } catch (error) {
       const msg = error.response?.data?.message || "Something went wrong!";
       toast.error(msg);
