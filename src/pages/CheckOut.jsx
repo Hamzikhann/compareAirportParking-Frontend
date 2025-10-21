@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../sections/Navbar";
 import Steps from "../components/Steps";
 import Input from "../components/Input";
@@ -7,452 +7,543 @@ import PaymentBox from "../components/PaymentBox";
 import Button from "../components/Button";
 import Footer from "../sections/Footer";
 import SummaryCard from "../components/SummaryCard";
+import Login from "../sections/Login";
+import SignUp from "../sections/SignUp";
 import useUserStore from "../store/userStore";
 import useCheckoutStore from "../store/checkoutStore";
 import selectedPackageStore from "../store/selectedPackage";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { CreditCard, User, Plane, Car, ShieldCheck, ArrowRight, Lock } from "lucide-react";
 
 function CheckOut() {
-  const navigate = useNavigate();
-  const setCheckoutData = useCheckoutStore((state) => state.setCheckoutData);
-  const selectedPackage = selectedPackageStore(
-    (state) => state.selectedPackage
-  );
-  const { user, isLoggedIn } = useUserStore();
+	const navigate = useNavigate();
+	const setCheckoutData = useCheckoutStore((state) => state.setCheckoutData);
+	const selectedPackage = selectedPackageStore((state) => state.selectedPackage);
+	const { user, isLoggedIn } = useUserStore();
 
-  // ---------- Form States ----------
-  const [formData, setFormData] = useState({
-    title: user.user?.title || "",
-    firstName: user.user?.firstName || "",
-    lastName: user.user?.lastName || "",
-    email: user.user?.email || "",
-    phone: user.user?.phone || "",
-    outboundTerminal: "",
-    inboundTerminal: "",
-    departureFlight: "",
-    returnFlight: "",
-    vehicleRegNo: "",
-    carYear: "",
-    carColor: "",
-    carManufacturer: "",
-    carType: "",
-    passengers: "",
-  });
+	const [activeSection, setActiveSection] = useState(0);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [loginOpen, setLoginOpen] = useState(false);
+	const [signupOpen, setSignupOpen] = useState(false);
 
-  // ---------- Dropdown Options ----------
-  const title = [
-    { label: "Mr", value: "Mr" },
-    { label: "Ms", value: "Ms" },
-    { label: "Mrs", value: "Mrs" },
-    { label: "Dr", value: "Dr" },
-  ];
+	// ---------- Form States ----------
+	const [formData, setFormData] = useState({
+		title: "",
+		firstName: "",
+		lastName: "",
+		email: "",
+		phone: "",
+		outboundTerminal: "",
+		inboundTerminal: "",
+		departureFlight: "",
+		returnFlight: "",
+		vehicleRegNo: "",
+		carYear: "",
+		carColor: "",
+		carManufacturer: "",
+		carType: "",
+		passengers: ""
+	});
 
-  const carType = [
-    { label: "Manual", value: "Manual" },
-    { label: "Auto", value: "Auto" },
-  ];
+	// Update form data when user logs in
+	useEffect(() => {
+		if (isLoggedIn && user?.user) {
+			setFormData((prev) => ({
+				...prev,
+				title: user.user.title || prev.title,
+				firstName: user.user.firstName || prev.firstName,
+				lastName: user.user.lastName || prev.lastName,
+				email: user.user.email || prev.email,
+				phone: user.user.phone || prev.phone
+			}));
+		}
+	}, [isLoggedIn, user]);
 
-  // ---------- Handle Change ----------
-  const handleChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+	// ---------- Dropdown Options ----------
+	const title = [
+		{ label: "Mr", value: "Mr" },
+		{ label: "Ms", value: "Ms" },
+		{ label: "Mrs", value: "Mrs" },
+		{ label: "Dr", value: "Dr" }
+	];
 
-  // ---------- Form Validation ----------
-  const validateForm = () => {
-    const requiredFields = [
-      "title",
-      "firstName",
-      "email",
-      "phone",
-      "outboundTerminal",
-      "inboundTerminal",
-      "departureFlight",
-      "returnFlight",
-      "vehicleRegNo",
-      "carYear",
-      "carColor",
-      "carManufacturer",
-      "carType",
-      "passengers",
-    ];
+	const carType = [
+		{ label: "Manual", value: "Manual" },
+		{ label: "Auto", value: "Auto" }
+	];
 
-    for (const field of requiredFields) {
-      if (!formData[field]) {
-        toast.error(
-          `Please fill the ${field.replace(/([A-Z])/g, " $1")} field.`
-        );
-        return false;
-      }
-    }
-    return true;
-  };
+	// ---------- Handle Change ----------
+	const handleChange = (field, value) => {
+		setFormData((prev) => ({
+			...prev,
+			[field]: value
+		}));
+	};
 
-  // ---------- Submit Handler ----------
-  const handleSubmit = () => {
-    if (!isLoggedIn) {
-      toast.error(
-        "Please login or sign up before completing your reservation."
-      );
-      return;
-    }
+	// ---------- Section Navigation ----------
+	const sections = [
+		{ id: 0, title: "Your Details", icon: User, completed: false },
+		{ id: 1, title: "Flight Details", icon: Plane, completed: false },
+		{ id: 2, title: "Vehicle Details", icon: Car, completed: false }
+	];
 
-    const isIncomplete = Object.values(formData).some(
-      (val) => String(val).trim() === ""
-    );
+	const nextSection = () => {
+		if (validateCurrentSection()) {
+			if (activeSection < sections.length - 1) {
+				setActiveSection(activeSection + 1);
+			}
+		}
+	};
 
-    if (isIncomplete) {
-      toast.error("Please fill in all required fields.");
-      return;
-    }
+	const prevSection = () => {
+		if (activeSection > 0) {
+			setActiveSection(activeSection - 1);
+		}
+	};
 
-    setCheckoutData(formData);
-    toast.success("Form submitted successfully!");
-    // console.log("Form Data Submitted:", formData);
+	// ---------- Form Validation ----------
+	const validateCurrentSection = () => {
+		const sectionFields = {
+			0: ["title", "firstName", "email", "phone"],
+			1: ["outboundTerminal", "inboundTerminal", "departureFlight", "returnFlight"],
+			2: ["vehicleRegNo", "carYear", "carColor", "carManufacturer", "carType", "passengers"]
+		};
 
-    setTimeout(() => {
-      navigate("/payment");
-    }, 1200);
-  };
+		const currentFields = sectionFields[activeSection];
+		for (const field of currentFields) {
+			if (!formData[field]) {
+				toast.error(`Please fill the ${field.replace(/([A-Z])/g, " $1").toLowerCase()} field.`);
+				return false;
+			}
+		}
+		return true;
+	};
 
-  return (
-    <>
-      <Navbar />
-      <Steps />
+	// ---------- Submit Handler ----------
+	const handleSubmit = async () => {
+		if (!isLoggedIn) {
+			toast.error("Please login or sign up before completing your reservation.");
+			return;
+		}
 
-      <section className="flex flex-col gap-8 items-start w-full lg:px-20 px-6 pb-20 pt-8">
-        <h1 className="text-4xl font-bold font-serif text-gray-800">
-          Checkout
-        </h1>
+		if (!validateCurrentSection()) return;
 
-        <section className="flex gap-12 w-full">
-          {/* Left Content */}
-          <div className="w-[68%] bg-white">
-            {/* Your Details */}
-            <div className="flex flex-col gap-7 mt-4 w-full">
-              <h1 className="text-2xl font-semibold text-gray-800">
-                1. Your Details
-              </h1>
-              {!isLoggedIn ? (
-                <div className="p-5 bg-gray-50 border border-gray-200 rounded-md text-center">
-                  <p className="text-gray-700 text-base font-medium">
-                    Please{" "}
-                    <span className="text-blue-600 cursor-pointer">login</span>{" "}
-                    or{" "}
-                    <span className="text-blue-600 cursor-pointer">
-                      sign up
-                    </span>{" "}
-                    to continue.
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-7 w-full">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-base font-normal text-gray-900">
-                      Title <span className="text-base text-red-500">*</span>
-                    </label>
-                    <Dropdown
-                      options={title}
-                      placeholder="Select Title"
-                      value={formData.title}
-                      onChange={(val) => handleChange("title", val)}
-                      width="w-full"
-                      rounded="rounded-md"
-                      padding="py-3 px-3"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-base font-normal text-gray-900">
-                      First Name{" "}
-                      <span className="text-base text-red-500">*</span>
-                    </label>
-                    <Input
-                      type="text"
-                      placeholder="Enter first name"
-                      value={formData.firstName}
-                      onChange={(e) =>
-                        handleChange("firstName", e.target.value)
-                      }
-                      rounded="rounded-md"
-                      width="w-full"
-                      padding="py-3 px-3"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-base font-normal text-gray-900">
-                      Last Name
-                    </label>
-                    <Input
-                      type="text"
-                      placeholder="Enter last name"
-                      value={formData.lastName}
-                      onChange={(e) => handleChange("lastName", e.target.value)}
-                      rounded="rounded-md"
-                      width="w-full"
-                      padding="py-3 px-3"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-base font-normal text-gray-900">
-                      Email <span className="text-base text-red-500">*</span>
-                    </label>
-                    <Input
-                      type="email"
-                      placeholder="Enter email"
-                      value={formData.email}
-                      onChange={(e) => handleChange("email", e.target.value)}
-                      rounded="rounded-md"
-                      width="w-full"
-                      padding="py-3 px-3"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-base font-normal text-gray-900">
-                      Phone No <span className="text-base text-red-500">*</span>
-                    </label>
-                    <Input
-                      type="phone"
-                      placeholder="Enter phone number"
-                      value={formData.phone}
-                      onChange={(e) => handleChange("phone", e.target.value)}
-                      rounded="rounded-md"
-                      width="w-full"
-                      padding="py-3 px-3"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
+		setIsSubmitting(true);
 
-            <hr className="border-0.5 border-gray-300 my-8" />
+		try {
+			setCheckoutData(formData);
+			toast.success("Form submitted successfully!");
 
-            {/* Flight Details */}
-            <div className="flex flex-col gap-7 mt-4 w-full">
-              <h1 className="text-2xl font-semibold text-gray-800">
-                2. Flight Details
-              </h1>
-              <div className="grid grid-cols-2 gap-7 w-full">
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    Outbound Terminal{" "}
-                    <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Input
-                    label="Outbound Terminal"
-                    type="text"
-                    placeholder="Enter outbound terminal"
-                    value={formData.outboundTerminal}
-                    onChange={(e) =>
-                      handleChange("outboundTerminal", e.target.value)
-                    }
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    Inbound Terminal{" "}
-                    <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Input
-                    label="Inbound Terminal"
-                    type="text"
-                    placeholder="Enter inbound terminal"
-                    value={formData.inboundTerminal}
-                    onChange={(e) =>
-                      handleChange("inboundTerminal", e.target.value)
-                    }
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    Departure Flight{" "}
-                    <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Input
-                    label="Departure Flight"
-                    type="text"
-                    placeholder="Enter departure flight"
-                    value={formData.departureFlight}
-                    onChange={(e) =>
-                      handleChange("departureFlight", e.target.value)
-                    }
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    Return Flight{" "}
-                    <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Input
-                    label="Return Flight"
-                    type="text"
-                    placeholder="Enter return flight"
-                    value={formData.returnFlight}
-                    onChange={(e) =>
-                      handleChange("returnFlight", e.target.value)
-                    }
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-              </div>
-            </div>
+			setTimeout(() => {
+				navigate("/payment");
+			}, 1200);
+		} catch {
+			toast.error("Something went wrong. Please try again.");
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
-            <hr className="border-0.5 border-gray-300 my-8" />
+	const SectionHeader = ({ section, isActive, onClick }) => {
+		const Icon = section.icon;
+		return (
+			<div
+				className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 ${
+					isActive
+						? "bg-gradient-to-r from-[#b4e172]/20 to-[#1a475b]/20 border-2 border-[#b4e172] shadow-sm"
+						: "bg-gray-50 border-2 border-transparent hover:border-gray-200"
+				}`}
+				onClick={onClick}
+			>
+				<div
+					className={`p-3 rounded-lg transition-colors ${
+						isActive ? "bg-[#b4e172] text-[#1a475b]" : "bg-gray-200 text-gray-600"
+					}`}
+				>
+					<Icon size={20} />
+				</div>
+				<div>
+					<h3 className={`font-semibold transition-colors ${isActive ? "text-[#1a475b]" : "text-gray-700"}`}>
+						{section.title}
+					</h3>
+					<p className={`text-sm transition-colors ${isActive ? "text-[#b4e172]" : "text-gray-500"}`}>
+						Step {section.id + 1} of {sections.length}
+					</p>
+				</div>
+			</div>
+		);
+	};
 
-            {/* Vehicle Details */}
-            <div className="flex flex-col gap-7 mt-4 w-full">
-              <h1 className="text-2xl font-semibold text-gray-800">
-                3. Vehicle Details
-              </h1>
-              <div className="grid grid-cols-2 gap-7 w-full">
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    Vehicle Registration No{" "}
-                    <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Input
-                    label="Vehicle Registration No"
-                    type="text"
-                    placeholder="Enter registration number"
-                    value={formData.vehicleRegNo}
-                    onChange={(e) =>
-                      handleChange("vehicleRegNo", e.target.value)
-                    }
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    Car Year <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Input
-                    label="Car Year"
-                    type="text"
-                    placeholder="Enter car year"
-                    value={formData.carYear}
-                    onChange={(e) => handleChange("carYear", e.target.value)}
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    Car Color <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Input
-                    label="Car Color"
-                    type="text"
-                    placeholder="Enter car color"
-                    value={formData.carColor}
-                    onChange={(e) => handleChange("carColor", e.target.value)}
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    Car Manufacturer{" "}
-                    <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Input
-                    label="Car Manufacturer"
-                    type="text"
-                    placeholder="Enter manufacturer"
-                    value={formData.carManufacturer}
-                    onChange={(e) =>
-                      handleChange("carManufacturer", e.target.value)
-                    }
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    Car Type <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Dropdown
-                    options={carType}
-                    placeholder="Select car type"
-                    value={formData.carType}
-                    onChange={(val) => handleChange("carType", val)}
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-base font-normal text-gray-900">
-                    No of Passengers{" "}
-                    <span className="text-base text-red-500">*</span>
-                  </label>
-                  <Input
-                    label="No of Passengers"
-                    type="number"
-                    placeholder="Enter passengers"
-                    value={formData.passengers}
-                    onChange={(e) => handleChange("passengers", e.target.value)}
-                    width="w-full"
-                    rounded="rounded-md"
-                    padding="py-3 px-3"
-                  />
-                </div>
-              </div>
-            </div>
+	return (
+		<div className="min-h-screen bg-gradient-to-br from-gray-50 to-[#1a475b]/10">
+			<Navbar />
 
-            <div className="text-end mt-5">
-              <p className="font-semibold text-base text-gray-500">
-                Pay{" "}
-                <span className="text-gray-950">{selectedPackage.price}</span>{" "}
-                Today
-              </p>
-              <p className="text-gray-600 text-xs font-light mt-1">
-                By selecting ‘Complete Reservation’ you agree to our Terms of
-                Use and Privacy Notice.
-              </p>
-            </div>
+			{/* Enhanced Steps Component */}
+			<div className="bg-white border-b border-gray-200">
+				<div className="max-w-7xl mx-auto px-6 py-8">
+					<div className="flex items-center justify-between">
+						<div>
+							<h1 className="text-3xl font-bold text-gray-900 font-serif">Complete Your Booking</h1>
+							<p className="text-gray-600 mt-2">Secure your parking reservation in just a few steps</p>
+						</div>
+						<div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full">
+							<ShieldCheck size={18} className="text-green-600" />
+							<span className="text-sm font-medium text-green-800">Secure & Encrypted</span>
+						</div>
+					</div>
+				</div>
+			</div>
 
-            {/* Complete Reservation Button */}
-            <div className="flex flex-col gap-3 mt-5">
-              <Button
-                text="Submit"
-                bg="bg-[#b4e172]"
-                borderColor="border-[#b4e172]"
-                textColor="text-[#1a475b]"
-                width="w-full"
-                padding="py-4"
-                onClick={handleSubmit}
-              />
-            </div>
-          </div>
+			<div className="max-w-7xl mx-auto px-6 py-8">
+				<div className="flex gap-8">
+					{/* Left Sidebar - Section Navigation */}
+					<div className="w-80 flex-shrink-0">
+						<div className="sticky top-8 space-y-3">
+							{sections.map((section) => (
+								<SectionHeader
+									key={section.id}
+									section={section}
+									isActive={activeSection === section.id}
+									onClick={() => setActiveSection(section.id)}
+								/>
+							))}
 
-          {/* Right Content */}
-          <section className="w-[32%] bg-white">
-            <SummaryCard />
-          </section>
-        </section>
-      </section>
+							{/* Progress Summary */}
+							<div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm mt-6">
+								<div className="flex items-center justify-between mb-4">
+									<span className="text-sm font-medium text-gray-700">Total Amount</span>
+									<span className="text-2xl font-bold text-gray-900">{selectedPackage?.price}</span>
+								</div>
+								<div className="space-y-2 text-sm text-gray-600">
+									<div className="flex justify-between">
+										<span>Parking Fee</span>
+										<span>{selectedPackage?.price}</span>
+									</div>
+									<div className="flex justify-between">
+										<span>Service Fee</span>
+										<span>£0.00</span>
+									</div>
+								</div>
+								<div className="border-t border-gray-200 mt-4 pt-4">
+									<div className="flex items-center gap-2 text-green-600">
+										<Lock size={14} />
+										<span className="text-sm font-medium">Payment Secured</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-      <Footer />
-    </>
-  );
+					{/* Main Content */}
+					<div className="flex-1">
+						<div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+							{/* Section Content */}
+							<div className="p-8">
+								{!isLoggedIn ? (
+									<div className="text-center py-12">
+										<User size={48} className="mx-auto text-gray-400 mb-4" />
+										<h3 className="text-xl font-semibold text-gray-900 mb-2">Authentication Required</h3>
+										<p className="text-gray-600 mb-6">
+											Please login or create an account to continue with your booking
+										</p>
+										<div className="flex gap-4 justify-center">
+											<button
+												onClick={() => setLoginOpen(true)}
+												className="bg-[#b4e172] text-[#1a475b] px-6 py-3 rounded-lg font-medium hover:bg-[#a3d165] transition-colors"
+											>
+												Login
+											</button>
+											<button
+												onClick={() => setSignupOpen(true)}
+												className="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+											>
+												Sign Up
+											</button>
+										</div>
+									</div>
+								) : (
+									<>
+										{/* Your Details Section */}
+										{activeSection === 0 && (
+											<div className="space-y-6 animate-fadeIn">
+												<div className="flex items-center gap-3 mb-6">
+													<User className="text-blue-500" size={24} />
+													<h2 className="text-2xl font-bold text-gray-900">Personal Information</h2>
+												</div>
+												<div className="grid grid-cols-2 gap-6">
+													<div className="col-span-2 sm:col-span-1">
+														<label className="block text-sm font-medium text-gray-700 mb-2">
+															Title <span className="text-red-500">*</span>
+														</label>
+														<Dropdown
+															options={title}
+															placeholder="Select Title"
+															value={formData.title}
+															onChange={(val) => handleChange("title", val)}
+															width="w-full"
+															rounded="rounded-lg"
+															padding="py-3 px-4"
+														/>
+													</div>
+													<div className="col-span-2 sm:col-span-1">
+														<label className="block text-sm font-medium text-gray-700 mb-2">
+															First Name <span className="text-red-500">*</span>
+														</label>
+														<Input
+															type="text"
+															placeholder="Enter first name"
+															value={formData.firstName}
+															onChange={(e) => handleChange("firstName", e.target.value)}
+															rounded="rounded-lg"
+															width="w-full"
+															padding="py-3 px-4"
+														/>
+													</div>
+													<div className="col-span-2 sm:col-span-1">
+														<label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+														<Input
+															type="text"
+															placeholder="Enter last name"
+															value={formData.lastName}
+															onChange={(e) => handleChange("lastName", e.target.value)}
+															rounded="rounded-lg"
+															width="w-full"
+															padding="py-3 px-4"
+														/>
+													</div>
+													<div className="col-span-2 sm:col-span-1">
+														<label className="block text-sm font-medium text-gray-700 mb-2">
+															Email <span className="text-red-500">*</span>
+														</label>
+														<Input
+															type="email"
+															placeholder="Enter email"
+															value={formData.email}
+															onChange={(e) => handleChange("email", e.target.value)}
+															rounded="rounded-lg"
+															width="w-full"
+															padding="py-3 px-4"
+														/>
+													</div>
+													<div className="col-span-2">
+														<label className="block text-sm font-medium text-gray-700 mb-2">
+															Phone No <span className="text-red-500">*</span>
+														</label>
+														<Input
+															type="tel"
+															placeholder="Enter phone number"
+															value={formData.phone}
+															onChange={(e) => handleChange("phone", e.target.value)}
+															rounded="rounded-lg"
+															width="w-full"
+															padding="py-3 px-4"
+														/>
+													</div>
+												</div>
+											</div>
+										)}
+
+										{/* Flight Details Section */}
+										{activeSection === 1 && (
+											<div className="space-y-6 animate-fadeIn">
+												<div className="flex items-center gap-3 mb-6">
+													<Plane className="text-blue-500" size={24} />
+													<h2 className="text-2xl font-bold text-gray-900">Flight Information</h2>
+												</div>
+												<div className="grid grid-cols-2 gap-6">
+													{[
+														{ label: "Outbound Terminal", field: "outboundTerminal" },
+														{ label: "Inbound Terminal", field: "inboundTerminal" },
+														{ label: "Departure Flight", field: "departureFlight" },
+														{ label: "Return Flight", field: "returnFlight" }
+													].map(({ label, field }) => (
+														<div key={field} className="col-span-2 sm:col-span-1">
+															<label className="block text-sm font-medium text-gray-700 mb-2">
+																{label} <span className="text-red-500">*</span>
+															</label>
+															<Input
+																type="text"
+																placeholder={`Enter ${label.toLowerCase()}`}
+																value={formData[field]}
+																onChange={(e) => handleChange(field, e.target.value)}
+																rounded="rounded-lg"
+																width="w-full"
+																padding="py-3 px-4"
+															/>
+														</div>
+													))}
+												</div>
+											</div>
+										)}
+
+										{/* Vehicle Details Section */}
+										{activeSection === 2 && (
+											<div className="space-y-6 animate-fadeIn">
+												<div className="flex items-center gap-3 mb-6">
+													<Car className="text-blue-500" size={24} />
+													<h2 className="text-2xl font-bold text-gray-900">Vehicle Information</h2>
+												</div>
+												<div className="grid grid-cols-2 gap-6">
+													{[
+														{ label: "Vehicle Registration No", field: "vehicleRegNo" },
+														{ label: "Car Year", field: "carYear" },
+														{ label: "Car Color", field: "carColor" },
+														{ label: "Car Manufacturer", field: "carManufacturer" }
+													].map(({ label, field }) => (
+														<div key={field} className="col-span-2 sm:col-span-1">
+															<label className="block text-sm font-medium text-gray-700 mb-2">
+																{label} <span className="text-red-500">*</span>
+															</label>
+															<Input
+																type="text"
+																placeholder={`Enter ${label.toLowerCase()}`}
+																value={formData[field]}
+																onChange={(e) => handleChange(field, e.target.value)}
+																rounded="rounded-lg"
+																width="w-full"
+																padding="py-3 px-4"
+															/>
+														</div>
+													))}
+													<div className="col-span-2 sm:col-span-1">
+														<label className="block text-sm font-medium text-gray-700 mb-2">
+															Car Type <span className="text-red-500">*</span>
+														</label>
+														<Dropdown
+															options={carType}
+															placeholder="Select car type"
+															value={formData.carType}
+															onChange={(val) => handleChange("carType", val)}
+															width="w-full"
+															rounded="rounded-lg"
+															padding="py-3 px-4"
+														/>
+													</div>
+													<div className="col-span-2 sm:col-span-1">
+														<label className="block text-sm font-medium text-gray-700 mb-2">
+															No of Passengers <span className="text-red-500">*</span>
+														</label>
+														<Input
+															type="number"
+															placeholder="Enter number of passengers"
+															value={formData.passengers}
+															onChange={(e) => handleChange("passengers", e.target.value)}
+															rounded="rounded-lg"
+															width="w-full"
+															padding="py-3 px-4"
+														/>
+													</div>
+												</div>
+											</div>
+										)}
+									</>
+								)}
+							</div>
+
+							{/* Navigation Footer */}
+							{isLoggedIn && (
+								<div className="border-t border-gray-200 bg-gray-50 px-8 py-6">
+									<div className="flex items-center justify-between">
+										<button
+											onClick={prevSection}
+											disabled={activeSection === 0}
+											className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+												activeSection === 0
+													? "text-gray-400 cursor-not-allowed"
+													: "text-gray-700 hover:bg-white border border-gray-300"
+											}`}
+										>
+											Back
+										</button>
+
+										{activeSection < sections.length - 1 ? (
+											<button
+												onClick={nextSection}
+												className="flex items-center gap-2 bg-[#b4e172] text-[#1a475b] px-6 py-3 rounded-lg font-medium hover:bg-[#a3d165] transition-colors"
+											>
+												Continue
+												<ArrowRight size={16} />
+											</button>
+										) : (
+											<button
+												onClick={handleSubmit}
+												disabled={isSubmitting}
+												className="flex items-center gap-2 bg-[#b4e172] text-[#1a475b] px-8 py-3 rounded-lg font-medium hover:bg-[#a3d165] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+											>
+												{isSubmitting ? (
+													<>
+														<div className="animate-spin rounded-full h-4 w-4 border-2 border-[#1a475b] border-t-transparent"></div>
+														Processing...
+													</>
+												) : (
+													<>
+														Complete Reservation
+														<CreditCard size={16} />
+													</>
+												)}
+											</button>
+										)}
+									</div>
+
+									{/* Security Footer */}
+									<div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-gray-200">
+										<div className="flex items-center gap-2 text-gray-500">
+											<ShieldCheck size={16} />
+											<span className="text-sm">SSL Encrypted</span>
+										</div>
+										<div className="flex items-center gap-2 text-gray-500">
+											<Lock size={16} />
+											<span className="text-sm">Secure Payment</span>
+										</div>
+									</div>
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<Footer />
+
+			{/* Login Modal */}
+			<Login
+				open={loginOpen}
+				onClose={() => setLoginOpen(false)}
+				onOpenSignup={() => {
+					setLoginOpen(false);
+					setSignupOpen(true);
+				}}
+			/>
+
+			{/* SignUp Modal */}
+			<SignUp
+				open={signupOpen}
+				onClose={() => setSignupOpen(false)}
+				onOpenLogin={() => {
+					setSignupOpen(false);
+					setLoginOpen(true);
+				}}
+			/>
+
+			{/* Add some custom styles for animations */}
+			<style jsx>{`
+				@keyframes fadeIn {
+					from {
+						opacity: 0;
+						transform: translateY(10px);
+					}
+					to {
+						opacity: 1;
+						transform: translateY(0);
+					}
+				}
+				.animate-fadeIn {
+					animation: fadeIn 0.3s ease-out;
+				}
+			`}</style>
+		</div>
+	);
 }
 
 export default CheckOut;
