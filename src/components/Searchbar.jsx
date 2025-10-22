@@ -154,18 +154,18 @@ function Searchbar() {
 					</div>
 
 					{/* Main Search Row */}
-					<div className="bg-white flex flex-col sm:flex-row items-center justify-center gap-3 rounded-lg sm:rounded-full py-4 px-4 sm:px-5">
+					<div className="bg-white flex h-[20rem] sm:w-[30rem] lg:w-auto lg:h-auto space-y-4 lg:space-y-0 flex-col lg:flex-row items-center justify-center gap-3 rounded-lg lg:rounded-full py-4 px-4 sm:px-5">
 						{/* Airport Dropdown */}
 						<Dropdown
 							options={airports}
 							placeholder="Select Airport..."
-							width="w-full sm:w-[250px]"
+							width="w-full lg:w-[250px]"
 							rounded="rounded-md"
 							onChange={(val) => setAirport(val)}
 						/>
 
 						{/* Check-In */}
-						<div className="relative w-full sm:w-[230px]">
+						<div className="relative w-full lg:w-[230px]">
 							<DateTimePicker
 								label="Check-In"
 								value={checkInDateTime}
@@ -208,7 +208,7 @@ function Searchbar() {
 						</div>
 
 						{/* Check-Out */}
-						<div className="relative w-full sm:w-[230px]">
+						<div className="relative w-full lg:w-[230px]">
 							<DateTimePicker
 								label="Check-Out"
 								value={checkOutDateTime}
@@ -254,7 +254,7 @@ function Searchbar() {
 						<button
 							onClick={handleSearch}
 							disabled={!isFormValid || isLoading}
-							className={`flex items-center gap-2 justify-center w-full sm:w-auto px-5 py-3 rounded-full font-medium ${
+							className={`flex items-center gap-2 justify-center w-full lg:w-auto px-5 py-3 rounded-full font-medium ${
 								isFormValid
 									? "bg-[#b4e076] text-[#15445f] cursor-pointer hover:bg-[#a3d165] transition-colors"
 									: "bg-gray-300 text-gray-500 cursor-not-allowed"

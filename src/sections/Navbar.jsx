@@ -51,7 +51,7 @@ function Navbar() {
 
 	return (
 		<>
-			<div className="bg-white shadow-lg sticky top-0 z-50 relative">
+			<div className="bg-white shadow-lg sticky top-0 z-50">
 				<div className="flex items-center justify-between gap-12 py-4 px-4 sm:px-14 border-b border-gray-100">
 					<Link to="/" className="transition-transform hover:scale-105">
 						<img className="w-auto h-10" src={logo} alt="Compare Airport Parking Logo" />
