@@ -141,17 +141,17 @@ function Navbar() {
 							onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
 							className="text-gray-800 hover:text-[#1a454e] focus:outline-none transition-colors duration-200"
 						>
-							<svg 
-								className={`w-6 h-6 transition-transform duration-300 ${mobileMenuOpen ? 'rotate-90' : ''}`} 
-								fill="none" 
-								stroke="currentColor" 
+							<svg
+								className={`w-6 h-6 transition-transform duration-300 ${mobileMenuOpen ? 'rotate-90' : ''}`}
+								fill="none"
+								stroke="currentColor"
 								viewBox="0 0 24 24"
 							>
-								<path 
-									strokeLinecap="round" 
-									strokeLinejoin="round" 
-									strokeWidth={2} 
-									d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} 
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
 								/>
 							</svg>
 						</button>
@@ -169,16 +169,15 @@ function Navbar() {
 										to={item.link}
 										key={index}
 										onClick={() => setMobileMenuOpen(false)}
-										className={`block px-4 py-3 text-lg font-medium text-gray-800 hover:text-[#1a454e] hover:bg-gradient-to-r hover:from-[#b4e172]/10 hover:to-transparent rounded-xl transition-all duration-300 group border border-transparent hover:border-[#b4e172]/20 ${
-											mobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
-										}`}
+										className={`block px-4 py-3 text-lg font-medium text-gray-800 hover:text-[#1a454e] hover:bg-gradient-to-r hover:from-[#b4e172]/10 hover:to-transparent rounded-xl transition-all duration-300 group border border-transparent hover:border-[#b4e172]/20 ${mobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
+											}`}
 										style={{ transitionDelay: `${index * 50}ms` }}
 									>
 										{item.title}
 									</Link>
 								))}
 							</div>
-							
+
 							{/* Divider */}
 							<div className="relative">
 								<div className="absolute inset-0 flex items-center">
@@ -188,11 +187,10 @@ function Navbar() {
 									<span className="px-4 bg-white text-gray-500 font-medium">Account</span>
 								</div>
 							</div>
-							
+
 							{/* Auth Section */}
-							<div className={`transition-all duration-300 transform ${
-								mobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
-							}`} style={{ transitionDelay: '200ms' }}>
+							<div className={`transition-all duration-300 transform ${mobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
+								}`} style={{ transitionDelay: '200ms' }}>
 								{isLoggedIn && (user?.role?.title === "Administrator" || user?.role?.title === "Subadmin") ? (
 									// ✅ Admin/Subadmin → show Sign In + Register only
 									<div className=" flex gap-2">
@@ -211,55 +209,54 @@ function Navbar() {
 									</div>
 								) : isLoggedIn ? (
 									// ✅ Normal logged-in user → show account options
-									<div className="">
-										
-										{/* Account Options */}
-										<div className="space-y-2">
-											<button
-												onClick={() => handleAccountOption("my-reservations")}
-												className="flex items-center px-4 py-3 text-gray-700 hover:text-[#1a454e] hover:bg-gradient-to-r hover:from-[#b4e172]/10 hover:to-transparent rounded-xl transition-all duration-300 group border border-transparent hover:border-[#b4e172]/20"
-											>
-												<div className="flex items-center space-x-3">
-													<div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-300">
-														<svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-														</svg>
-													</div>
-													<span className="font-medium">My Reservations</span>
+									<div className="space-y-2">
+										<button
+											onClick={() => handleAccountOption("my-reservations")}
+											className="flex items-center px-4 py-3 text-gray-700 hover:text-[#1a454e] hover:bg-gradient-to-r hover:from-[#b4e172]/10 hover:to-transparent rounded-xl transition-all duration-300 group border border-transparent hover:border-[#b4e172]/20"
+										>
+											<div className="flex items-center space-x-3">
+												<div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-300">
+													<svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+													</svg>
 												</div>
-											</button>
-
-											<button
-												onClick={() => handleAccountOption("edit-profile")}
-												className="flex items-center px-4 py-3 text-gray-700 hover:text-[#1a454e] hover:bg-gradient-to-r hover:from-[#b4e172]/10 hover:to-transparent rounded-xl transition-all duration-300 group border border-transparent hover:border-[#b4e172]/20"
-											>
-												<div className="flex items-center space-x-3">
-													<div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
-														<svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-														</svg>
-													</div>
-													<span className="font-medium">Edit Profile</span>
-												</div>
-											</button>
-
-											<div className="pt-2 border-t border-gray-200">
-												<button
-													onClick={() => handleAccountOption("logout")}
-													className="flex items-center px-4 py-3 text-red-600 hover:text-red-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-transparent rounded-xl transition-all duration-300 group border border-transparent hover:border-red-200"
-												>
-													<div className="flex items-center space-x-3">
-														<div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors duration-300">
-															<svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-																<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-															</svg>
-														</div>
-														<span className="font-medium">Logout</span>
-													</div>
-												</button>
+												<span className="font-medium">My Reservations</span>
 											</div>
+										</button>
+
+										<button
+											onClick={() => handleAccountOption("edit-profile")}
+											className="flex items-center px-4 py-3 text-gray-700 hover:text-[#1a454e] hover:bg-gradient-to-r hover:from-[#b4e172]/10 hover:to-transparent rounded-xl transition-all duration-300 group border border-transparent hover:border-[#b4e172]/20"
+										>
+											<div className="flex items-center space-x-3">
+												<div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
+													<svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+													</svg>
+												</div>
+												<span className="font-medium">Edit Profile</span>
+											</div>
+										</button>
+
+										<div className="pt-2 border-t border-gray-200">
+											<button
+												onClick={() => handleAccountOption("logout")}
+												className="flex items-center px-4 py-3 text-red-600 hover:text-red-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-transparent rounded-xl transition-all duration-300 group border border-transparent hover:border-red-200"
+											>
+												<div className="flex items-center space-x-3">
+													<div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors duration-300">
+														<svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+														</svg>
+													</div>
+													<span className="font-medium">Logout</span>
+												</div>
+											</button>
 										</div>
 									</div>
+
+
+
 								) : (
 									// ✅ Not logged in → show Sign In + Register
 									<div className="flex gap-4">
