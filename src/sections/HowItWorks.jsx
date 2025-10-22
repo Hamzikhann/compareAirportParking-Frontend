@@ -54,7 +54,7 @@ function HowItWorks() {
 								/>
 							</div>
 						</div>
-						<div className="w-full lg:w-auto flex justify-center">
+						<div className="w-full hidden lg:w-auto lg:flex justify-center">
 							<img className="h-[300px] sm:h-[400px] lg:h-[450px] w-auto" src={img} alt="" />
 						</div>
 					</div>

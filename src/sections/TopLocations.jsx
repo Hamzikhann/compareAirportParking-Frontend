@@ -13,10 +13,10 @@ function TopLocations() {
 				<p className="text-base sm:text-lg font-normal text-gray-700">
 					We sell airport parking at every major US and Canadian airport. Check out our most popular locations
 				</p>
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full h-auto lg:h-[80vh]">
+				<div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full h-auto lg:h-[80vh]">
 					{/* column-1 */}
 					<div className="flex flex-col gap-6">
-						<div className="relative w-full h-64 lg:h-[65%] overflow-hidden rounded-xl group cursor-pointer">
+						<div className="relative w-full h-64 sm:h-full overflow-hidden rounded-xl group cursor-pointer">
 							<div
 								className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-in-out group-hover:scale-110"
 								style={{ backgroundImage: `url(${chicago})` }}
@@ -26,7 +26,7 @@ function TopLocations() {
 								<h1 className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold tracking-wide">CHICAGO</h1>
 							</div>
 						</div>
-						<div className="relative w-full h-32 lg:h-[35%] overflow-hidden rounded-xl group cursor-pointer">
+						<div className="relative w-full h-64 lg:h-[65%] overflow-hidden rounded-xl group cursor-pointer">
 							<div
 								className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-in-out group-hover:scale-110"
 								style={{ backgroundImage: `url(${seatac})` }}
@@ -38,7 +38,7 @@ function TopLocations() {
 						</div>
 					</div>
 					{/* column-2 */}
-					<div className="relative w-full h-64 lg:h-full overflow-hidden rounded-xl group cursor-pointer">
+					<div className="relative w-full h-64 sm:h-full overflow-hidden rounded-xl group cursor-pointer">
 						<div
 							className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-in-out group-hover:scale-110"
 							style={{ backgroundImage: `url(${detroit})` }}
@@ -50,7 +50,7 @@ function TopLocations() {
 					</div>
 					{/* column-3 */}
 					<div className="flex flex-col gap-6">
-						<div className="relative w-full h-32 lg:h-[35%] overflow-hidden rounded-xl group cursor-pointer">
+						<div className="relative w-full h-64 sm:h-full overflow-hidden rounded-xl group cursor-pointer">
 							<div
 								className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-in-out group-hover:scale-110"
 								style={{ backgroundImage: `url(${losAngles})` }}

@@ -51,7 +51,7 @@ function WhyUs() {
 						})}
 					</div>
 					<div className="w-full lg:w-auto">
-						<img className="rounded-3xl w-full max-w-md lg:max-w-none" src={img} alt="" />
+						<img className="rounded-3xl w-full max-w-xl mx-auto h-[30rem] lg:h-auto lg:max-w-none" src={img} alt="" />
 					</div>
 				</div>
 			</section>
