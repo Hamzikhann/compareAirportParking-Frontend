@@ -1,0 +1,92 @@
+/* Luxury Valet Parking Toast Styles */
+.Toastify__toast-container {
+	width: auto !important;
+	max-width: 400px !important;
+	z-index: 9999 !important;
+}
+
+.Toastify__toast {
+	border-radius: 16px !important;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+	padding: 20px 24px !important;
+	min-height: 90px !important;
+	font-size: 15px !important;
+	font-weight: 500 !important;
+	font-family: "Inter", system-ui, sans-serif !important;
+	background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%) !important;
+	color: #ffffff !important;
+	position: relative !important;
+	overflow: hidden !important;
+}
+
+.Toastify__toast::before {
+	content: "" !important;
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	background: linear-gradient(45deg, rgba(181, 224, 116, 0.1), rgba(24, 69, 79, 0.1)) !important;
+	z-index: -1 !important;
+}
+
+/* Success - Valet Complete */
+.Toastify__toast--success {
+	background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+}
+
+/* Error - Valet Issue */
+.Toastify__toast--error {
+	background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+}
+
+/* Warning - Valet Alert */
+.Toastify__toast--warning {
+	background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+}
+
+/* Info - Valet Update */
+.Toastify__toast--info {
+	background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+}
+
+/* Progress Bar - Luxury Shine */
+.Toastify__progress-bar {
+	height: 4px !important;
+	background: linear-gradient(
+		90deg,
+		rgba(255, 255, 255, 0.3),
+		rgba(255, 255, 255, 0.8),
+		rgba(255, 255, 255, 0.3)
+	) !important;
+	border-radius: 0 0 16px 16px !important;
+}
+
+/* Close Button - Luxury X */
+.Toastify__close-button {
+	color: rgba(255, 255, 255, 0.8) !important;
+	opacity: 0.8 !important;
+	width: 28px !important;
+	height: 28px !important;
+	border-radius: 8px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	transition: all 0.3s ease !important;
+	background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.Toastify__close-button:hover {
+	opacity: 1 !important;
+	color: #ffffff !important;
+	background: rgba(255, 255, 255, 0.2) !important;
+	transform: scale(1.1) !important;
+}
+
+.Toastify__toast-body {
+	font-size: 15px !important;
+	font-weight: 500 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	line-height: 1.5 !important;
+}

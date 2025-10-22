@@ -1,18 +1,14 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import useUserStore from "../store/userStore";
-
+// import useUserStore from "../store/userStore";
+import { getSessionUser } from "../services/AuthService";
 const ProtectedRoute = ({ children }) => {
-  const { user, token, isLoggedIn } = useUserStore();
+	let user = getSessionUser();
+	if (user?.role?.title === "Administrator" || user?.role?.title === "Subadmin") {
+		return children;
+	}
 
-  if (
-    isLoggedIn &&
-    (user?.role?.title === "Administrator" || user?.role?.title === "Subadmin")
-  ) {
-    return children;
-  }
-
-  return <Navigate to="/adminLogin" replace />;
+	return <Navigate to="/adminLogin" replace />;
 };
 
 export default ProtectedRoute;

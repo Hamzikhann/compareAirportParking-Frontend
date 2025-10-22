@@ -1,4 +1,4 @@
-import React, { useRef, Suspense, lazy, useState } from "react";
+import React, { Suspense, lazy, useState } from "react";
 
 // Lazy load components for better performance
 const Navbar = lazy(() => import("../sections/Navbar"));
@@ -17,13 +17,14 @@ import {
 	FaClock,
 	FaImages
 } from "react-icons/fa";
-import { FaLocationDot, FaPlaneUp } from "react-icons/fa6";
+
 import { IoMdArrowRoundForward, IoIosPricetag } from "react-icons/io";
 import { GiCarKey } from "react-icons/gi";
 import selectedPackageStore from "../store/selectedPackage";
 
 function PackageDetails() {
-	const { selectedPackage } = selectedPackageStore();
+	const { selectedPackage, selectedDetails } = selectedPackageStore();
+	console.log(selectedDetails);
 	const [activeTab, setActiveTab] = useState("overview");
 
 	if (!selectedPackage) {
@@ -44,23 +45,11 @@ function PackageDetails() {
 		);
 	}
 
-	const {
-		name,
-		type,
-		price,
-		originalPrice,
-		rating,
-		image,
-		features,
-		amenities,
-		cancellation,
-		description,
-		note,
-		detailedInfo
-	} = selectedPackage;
+	const { name, type, price, originalPrice, rating, image, features, amenities, cancellation, description, note } =
+		selectedPackage;
 
-	const sections = detailedInfo?.sections || {};
-	const companyInfo = detailedInfo || {};
+	const sections = selectedDetails?.sections || {};
+	const companyInfo = selectedDetails || {};
 
 	// Function to safely render HTML content
 	const renderHTML = (html) => {
@@ -174,20 +163,23 @@ function PackageDetails() {
 							<div className="bg-white rounded-xl shadow-lg mb-8">
 								<div className="border-b border-gray-200">
 									<nav className="flex overflow-x-auto px-4 lg:px-6">
-										{tabs.map(({ id, label, icon: Icon }) => (
-											<button
-												key={id}
-												onClick={() => setActiveTab(id)}
-												className={`py-4 px-2 lg:px-4 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors whitespace-nowrap ${
-													activeTab === id
-														? "border-[#b4e172] text-[#15445f]"
-														: "border-transparent text-gray-500 hover:text-gray-700"
-												}`}
-											>
-												<Icon size={16} />
-												{label}
-											</button>
-										))}
+										{tabs.map((tab) => {
+											const { id, label, icon: Icon } = tab;
+											return (
+												<button
+													key={id}
+													onClick={() => setActiveTab(id)}
+													className={`py-4 px-2 lg:px-4 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors whitespace-nowrap ${
+														activeTab === id
+															? "border-[#b4e172] text-[#15445f]"
+															: "border-transparent text-gray-500 hover:text-gray-700"
+													}`}
+												>
+													<Icon size={16} />
+													{label}
+												</button>
+											);
+										})}
 									</nav>
 								</div>
 

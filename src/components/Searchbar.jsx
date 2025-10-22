@@ -148,24 +148,24 @@ function Searchbar() {
 			>
 				<div className="flex flex-col gap-4">
 					{/* Top Label */}
-					<div className="bg-white w-[200px] text-center bg-opacity-25 rounded-full py-2 px-3 flex items-center gap-1 text-white text-base font-light">
-						<TiPlaneOutline size={20} />
+					<div className="bg-white w-full max-w-[200px] mx-auto sm:mx-0 text-center bg-opacity-25 rounded-full py-2 px-3 flex items-center justify-center gap-1 text-white text-sm sm:text-base font-light">
+						<TiPlaneOutline size={16} className="sm:w-5 sm:h-5" />
 						<p>Airport Parking Only</p>
 					</div>
 
 					{/* Main Search Row */}
-					<div className="bg-white flex items-center justify-center gap-3 rounded-full py-4 px-5">
+					<div className="bg-white flex flex-col sm:flex-row items-center justify-center gap-3 rounded-lg sm:rounded-full py-4 px-4 sm:px-5">
 						{/* Airport Dropdown */}
 						<Dropdown
 							options={airports}
 							placeholder="Select Airport..."
-							width="w-[250px]"
+							width="w-full sm:w-[250px]"
 							rounded="rounded-md"
 							onChange={(val) => setAirport(val)}
 						/>
 
 						{/* Check-In */}
-						<div className="relative w-[230px]">
+						<div className="relative w-full sm:w-[230px]">
 							<DateTimePicker
 								label="Check-In"
 								value={checkInDateTime}
@@ -208,7 +208,7 @@ function Searchbar() {
 						</div>
 
 						{/* Check-Out */}
-						<div className="relative w-[230px]">
+						<div className="relative w-full sm:w-[230px]">
 							<DateTimePicker
 								label="Check-Out"
 								value={checkOutDateTime}
@@ -254,7 +254,7 @@ function Searchbar() {
 						<button
 							onClick={handleSearch}
 							disabled={!isFormValid || isLoading}
-							className={`flex items-center gap-2 justify-center px-5 py-3 rounded-full font-medium ${
+							className={`flex items-center gap-2 justify-center w-full sm:w-auto px-5 py-3 rounded-full font-medium ${
 								isFormValid
 									? "bg-[#b4e076] text-[#15445f] cursor-pointer hover:bg-[#a3d165] transition-colors"
 									: "bg-gray-300 text-gray-500 cursor-not-allowed"

@@ -24,7 +24,7 @@ const getToken = () => {
 
 const getSessionUser = () => {
 	try {
-		const user = sessionStorage.getItem("user") || sessionStorage.getItem("user");
+		const user = sessionStorage.getItem("parking-user");
 		if (!user || user === "undefined" || user === "null") return null;
 		return JSON.parse(user);
 	} catch (error) {

@@ -12,7 +12,7 @@ import Navbar from "../sections/Navbar";
 import Footer from "../sections/Footer";
 import Steps from "../components/Steps";
 import { CreditCard, Shield, Lock, CheckCircle, AlertCircle, RotateCcw, Calendar, Plane, Car } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const StripePaymentWrapper = ({ selectedPackage, children, setPaymentIntent, user, bookingData }) => {
@@ -348,7 +348,7 @@ function Payment() {
 	const { bookingData, clearBookingData } = bookingDataStore();
 	const { checkoutData } = useCheckoutStore();
 	const { selectedPackage, clearPackages } = selectedPackageStore();
-
+	let navigate = useNavigate();
 	const [paymentIntent, setPaymentIntent] = useState();
 
 	const handlePaymentSuccess = async () => {
@@ -400,6 +400,7 @@ function Payment() {
 
 			clearBookingData();
 			clearPackages();
+			navigate("/confirmation");
 		} catch (err) {
 			console.error("Booking creation failed:", err);
 		}
@@ -411,15 +412,17 @@ function Payment() {
 
 			{/* Enhanced Header */}
 			<div className="bg-white border-b border-gray-200">
-				<div className="max-w-7xl mx-auto px-6 py-8">
-					<div className="flex items-center justify-between">
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
 						<div>
-							<h1 className="text-3xl font-bold text-gray-900 font-serif">Secure Payment</h1>
-							<p className="text-gray-600 mt-2">Complete your booking with secure payment</p>
+							<h1 className="text-2xl sm:text-3xl font-bold text-gray-900 font-serif">Secure Payment</h1>
+							<p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">
+								Complete your booking with secure payment
+							</p>
 						</div>
-						<div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full">
-							<Shield size={18} className="text-green-600" />
-							<span className="text-sm font-medium text-green-800">100% Secure Payment</span>
+						<div className="flex items-center gap-2 bg-green-50 px-3 sm:px-4 py-2 rounded-full">
+							<Shield size={16} className="text-green-600" />
+							<span className="text-xs sm:text-sm font-medium text-green-800">100% Secure Payment</span>
 						</div>
 					</div>
 				</div>
@@ -427,18 +430,18 @@ function Payment() {
 
 			<Steps />
 
-			<div className="max-w-7xl mx-auto px-6 py-8">
-				<div className="flex gap-8">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+				<div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
 					{/* Main Payment Content */}
 					<div className="flex-1">
 						<div className="space-y-6">
 							{/* Booking Summary Card */}
-							<div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-								<h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-									<Calendar className="text-blue-500" size={24} />
+							<div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 sm:p-6">
+								<h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 flex items-center gap-3">
+									<Calendar className="text-blue-500" size={20} />
 									Booking Summary
 								</h2>
-								<div className="grid grid-cols-2 gap-6">
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
 									<div className="space-y-4">
 										<div>
 											<h3 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
@@ -491,7 +494,7 @@ function Payment() {
 
 							{/* Payment Section */}
 							<div>
-								<h2 className="text-2xl font-bold text-gray-900 mb-6">Payment Method</h2>
+								<h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Payment Method</h2>
 								{selectedPackage && (
 									<StripePaymentWrapper
 										bookingData={bookingData}
@@ -507,7 +510,7 @@ function Payment() {
 					</div>
 
 					{/* Summary Card Sidebar */}
-					<div className="w-96 flex-shrink-0">
+					<div className="w-full lg:w-96 flex-shrink-0">
 						<SummaryCard />
 					</div>
 				</div>

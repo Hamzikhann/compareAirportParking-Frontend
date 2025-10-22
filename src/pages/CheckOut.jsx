@@ -55,7 +55,7 @@ function CheckOut() {
 				firstName: user.user.firstName || prev.firstName,
 				lastName: user.user.lastName || prev.lastName,
 				email: user.user.email || prev.email,
-				phone: user.user.phone || prev.phone
+				phone: user.user.phoneNo || prev.phone
 			}));
 		}
 	}, [isLoggedIn, user]);
@@ -181,24 +181,26 @@ function CheckOut() {
 
 			{/* Enhanced Steps Component */}
 			<div className="bg-white border-b border-gray-200">
-				<div className="max-w-7xl mx-auto px-6 py-8">
-					<div className="flex items-center justify-between">
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+					<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
 						<div>
-							<h1 className="text-3xl font-bold text-gray-900 font-serif">Complete Your Booking</h1>
-							<p className="text-gray-600 mt-2">Secure your parking reservation in just a few steps</p>
+							<h1 className="text-2xl sm:text-3xl font-bold text-gray-900 font-serif">Complete Your Booking</h1>
+							<p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">
+								Secure your parking reservation in just a few steps
+							</p>
 						</div>
-						<div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full">
-							<ShieldCheck size={18} className="text-green-600" />
-							<span className="text-sm font-medium text-green-800">Secure & Encrypted</span>
+						<div className="flex items-center gap-2 bg-green-50 px-3 sm:px-4 py-2 rounded-full">
+							<ShieldCheck size={16} className="text-green-600" />
+							<span className="text-xs sm:text-sm font-medium text-green-800">Secure & Encrypted</span>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div className="max-w-7xl mx-auto px-6 py-8">
-				<div className="flex gap-8">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+				<div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
 					{/* Left Sidebar - Section Navigation */}
-					<div className="w-80 flex-shrink-0">
+					<div className="w-full lg:w-80 flex-shrink-0">
 						<div className="sticky top-8 space-y-3">
 							{sections.map((section) => (
 								<SectionHeader
@@ -210,10 +212,10 @@ function CheckOut() {
 							))}
 
 							{/* Progress Summary */}
-							<div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm mt-6">
+							<div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm mt-6">
 								<div className="flex items-center justify-between mb-4">
 									<span className="text-sm font-medium text-gray-700">Total Amount</span>
-									<span className="text-2xl font-bold text-gray-900">{selectedPackage?.price}</span>
+									<span className="text-xl sm:text-2xl font-bold text-gray-900">{selectedPackage?.price}</span>
 								</div>
 								<div className="space-y-2 text-sm text-gray-600">
 									<div className="flex justify-between">
@@ -239,7 +241,7 @@ function CheckOut() {
 					<div className="flex-1">
 						<div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
 							{/* Section Content */}
-							<div className="p-8">
+							<div className="p-4 sm:p-6 lg:p-8">
 								{!isLoggedIn ? (
 									<div className="text-center py-12">
 										<User size={48} className="mx-auto text-gray-400 mb-4" />
@@ -443,12 +445,12 @@ function CheckOut() {
 
 							{/* Navigation Footer */}
 							{isLoggedIn && (
-								<div className="border-t border-gray-200 bg-gray-50 px-8 py-6">
-									<div className="flex items-center justify-between">
+								<div className="border-t border-gray-200 bg-gray-50 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+									<div className="flex flex-col sm:flex-row items-center justify-between gap-4">
 										<button
 											onClick={prevSection}
 											disabled={activeSection === 0}
-											className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+											className={`w-full sm:w-auto px-6 py-3 rounded-lg font-medium transition-colors ${
 												activeSection === 0
 													? "text-gray-400 cursor-not-allowed"
 													: "text-gray-700 hover:bg-white border border-gray-300"
@@ -460,7 +462,7 @@ function CheckOut() {
 										{activeSection < sections.length - 1 ? (
 											<button
 												onClick={nextSection}
-												className="flex items-center gap-2 bg-[#b4e172] text-[#1a475b] px-6 py-3 rounded-lg font-medium hover:bg-[#a3d165] transition-colors"
+												className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#b4e172] text-[#1a475b] px-6 py-3 rounded-lg font-medium hover:bg-[#a3d165] transition-colors"
 											>
 												Continue
 												<ArrowRight size={16} />
@@ -469,7 +471,7 @@ function CheckOut() {
 											<button
 												onClick={handleSubmit}
 												disabled={isSubmitting}
-												className="flex items-center gap-2 bg-[#b4e172] text-[#1a475b] px-8 py-3 rounded-lg font-medium hover:bg-[#a3d165] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+												className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#b4e172] text-[#1a475b] px-8 py-3 rounded-lg font-medium hover:bg-[#a3d165] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 											>
 												{isSubmitting ? (
 													<>
@@ -487,7 +489,7 @@ function CheckOut() {
 									</div>
 
 									{/* Security Footer */}
-									<div className="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-gray-200">
+									<div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-4 pt-4 border-t border-gray-200">
 										<div className="flex items-center gap-2 text-gray-500">
 											<ShieldCheck size={16} />
 											<span className="text-sm">SSL Encrypted</span>

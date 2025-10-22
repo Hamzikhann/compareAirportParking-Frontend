@@ -1,8 +1,8 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Lazy load components for code splitting
@@ -18,6 +18,7 @@ const Customer = lazy(() => import("./pages/Customer"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const About = lazy(() => import("./pages/About"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -52,10 +53,20 @@ function App() {
 						<Route path="/how-it-works" element={<HowItWorks />} />
 						<Route path="/about" element={<About />} />
 						<Route path="/contact-us" element={<ContactUs />} />
+						<Route path="*" element={<NotFound />} />
 					</Routes>
 				</Suspense>
 			</Router>
-			<ToastContainer position="top-center" autoClose={2000} />
+
+			<ToastContainer
+				position="top-center"
+				autoClose={2000}
+				hideProgressBar={false}
+				closeOnClick
+				pauseOnHover
+				draggable
+				pauseOnFocusLoss
+			/>
 		</>
 	);
 }
