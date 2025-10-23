@@ -393,7 +393,7 @@ function PackageDetails() {
 						</div>
 
 						{/* Booking Sidebar */}
-						<div className="w-full lg:w-96 flex-shrink-0">
+						<div className="w-full xl:w-96 flex-shrink-0">
 							<div className="bg-white rounded-xl shadow-lg border border-gray-200 lg:sticky lg:top-6">
 								{/* Price Header */}
 								<div className="bg-gradient-to-r from-[#15445f] to-[#1a5a7a] text-white p-6 rounded-t-xl">
@@ -422,7 +422,7 @@ function PackageDetails() {
 
 								{/* Booking Info */}
 								<div className="p-6 space-y-4">
-									<div className="space-y-3">
+									<div className="space-y-3 mb-6">
 										{cancellation && (
 											<div className="flex items-center gap-2 text-green-600">
 												<FaCheck size={16} />
