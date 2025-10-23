@@ -85,15 +85,15 @@ const Footer = () => {
 
 			{/* App Store & Google Play placeholders */}
 
-			<div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 justify-between mt-6">
-				<div className="flex gap-4">
+			<div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 justify-end mt-6">
+				{/* <div className="flex gap-4">
 					<div className="w-[100px] sm:w-[120px] h-[40px] sm:h-[50px]">
 						<img src={appStore} alt="" className="w-full h-full object-contain" />
 					</div>
 					<div className="w-[100px] sm:w-[120px] h-[40px] sm:h-[50px]">
 						<img src={google} alt="" className="w-full h-full object-contain" />
 					</div>
-				</div>
+				</div> */}
 				<div className="w-full sm:w-auto">
 					<h5 className="text-gray-400 text-sm sm:text-[14px] font-semibold mb-3 text-center sm:text-left">
 						You can use these payment methods:

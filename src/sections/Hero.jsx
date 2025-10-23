@@ -6,7 +6,7 @@ import { IoFlowerSharp } from "react-icons/io5";
 function Hero() {
 	return (
 		<section
-			className="w-full h-[85vh] bg-cover bg-center flex flex-col gap-5 items-center justify-center text-white px-4"
+			className="w-full min-h-screen bg-cover bg-center flex flex-col gap-5 items-center justify-center text-white px-4"
 			style={{
 				backgroundImage: `url(${bg})`
 			}}

@@ -54,9 +54,9 @@ function ContactUs() {
 					<div className="absolute bottom-10 right-10 w-32 h-32 bg-[#b4e172] opacity-10 rounded-full animate-pulse delay-1000"></div>
 				</div>
 
-				<div className="container mx-auto px-4 py-16 lg:py-24">
+				<div className="container mx-auto px-4 2xl:px-14 py-16 lg:py-24">
 					{/* Main Content */}
-					<div className="grid lg:grid-cols-2 gap-12 lg:gap-16 mb-16 lg:mb-20">
+					<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 mb-16 lg:mb-20">
 						{/* Contact Form */}
 						<div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xl">
 							<div className="mb-8">
@@ -143,7 +143,7 @@ function ContactUs() {
 
 						{/* Contact Information */}
 						<div className="space-y-8">
-							<div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xl">
+							<div className="bg-white rounded-3xl p-4 sm:p-8 lg:p-10 shadow-xl">
 								<h2 className="text-3xl lg:text-4xl font-bold text-[#1a454e] mb-8">Contact Information</h2>
 								<div className="space-y-8">
 									<div className="flex items-start space-x-4">
@@ -152,20 +152,20 @@ function ContactUs() {
 										</div>
 										<div>
 											<h3 className="text-xl font-bold text-[#1a454e] mb-2">Our Office</h3>
-											<p className="text-gray-600 leading-relaxed">
+											<p className="text-gray-600 leading-relaxed text-sm sm:text-base">
 												123 Airport Way<br />
 												Travel City, TC 12345<br />
 												United States
 											</p>
 										</div>
 									</div>
-									<div className="flex items-start space-x-4">
+									<div className="flex items-start space-x-2 sm:space-x-4">
 										<div className="w-12 h-12 bg-gradient-to-r from-[#b4e172] to-[#9dd65a] rounded-xl flex items-center justify-center flex-shrink-0">
 											<FaPhone className="text-xl text-white" />
 										</div>
 										<div>
 											<h3 className="text-xl font-bold text-[#1a454e] mb-2">Phone Numbers</h3>
-											<p className="text-gray-600 leading-relaxed">
+											<p className="text-gray-600 leading-relaxed text-sm sm:text-base">
 												(555) 123-PARK<br />
 												Toll-free: 1-800-AIRPORT
 											</p>
@@ -177,7 +177,7 @@ function ContactUs() {
 										</div>
 										<div>
 											<h3 className="text-xl font-bold text-[#1a454e] mb-2">Email Addresses</h3>
-											<p className="text-gray-600 leading-relaxed">
+											<p className="text-gray-600 leading-relaxed text-sm sm:text-base">
 												support@compareairportparking.com<br />
 												sales@compareairportparking.com
 											</p>
@@ -189,7 +189,7 @@ function ContactUs() {
 										</div>
 										<div>
 											<h3 className="text-xl font-bold text-[#1a454e] mb-2">Business Hours</h3>
-											<p className="text-gray-600 leading-relaxed">
+											<p className="text-gray-600 leading-relaxed text-sm sm:text-base">
 												Monday - Friday: 9:00 AM - 6:00 PM EST<br />
 												Saturday: 10:00 AM - 4:00 PM EST<br />
 												Sunday: Closed

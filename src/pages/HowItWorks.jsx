@@ -75,9 +75,9 @@ function HowItWorks() {
 					<div className="absolute bottom-10 right-10 w-32 h-32 bg-[#b4e172] opacity-10 rounded-full animate-pulse delay-1000"></div>
 				</div>
 
-				<div className="container mx-auto px-4 py-16 lg:py-24">
+				<div className="container mx-auto px-4 2xl:px-14 py-16 lg:py-24">
 					{/* Steps Section */}
-					<div className="relative mb-16 lg:mb-20">
+					<div className="relative mb-16 lg:mb-20 overflow-hidden">
 						<div className="bg-gradient-to-br from-[#1a454e] to-[#1a475b] rounded-3xl p-8 sm:p-12 lg:p-16 text-white overflow-hidden">
 							{/* Background Pattern */}
 							<div className="absolute top-0 right-0 w-64 h-64 bg-[#b4e172] opacity-10 rounded-full -translate-y-32 translate-x-32"></div>
@@ -134,7 +134,7 @@ function HowItWorks() {
 							</p>
 						</div>
 
-						<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+						<div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
 							{features.map((feature, index) => (
 								<div key={index} className="bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
 									<div className="w-16 h-16 bg-gradient-to-r from-[#b4e172] to-[#9dd65a] rounded-full flex items-center justify-center mx-auto mb-4">

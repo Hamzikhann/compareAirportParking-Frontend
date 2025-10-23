@@ -61,10 +61,10 @@ function MyReservations() {
 
 			{/* Sub-tabs */}
 			<div className="flex mb-6">
-				<div className="bg-gray-100 rounded-lg p-1 flex">
+				<div className="bg-gray-100 rounded-lg p-1 flex flex-col sm:flex-row w-full sm:w-auto">
 					<button
 						onClick={() => setActiveTab("open")}
-						className={`px-6 py-2 rounded-md font-medium transition-colors text-nowrap ${
+						className={`px-4 sm:px-6 py-2 rounded-md font-medium transition-colors text-nowrap ${
 							activeTab === "open" ? "bg-[#b4e172] text-[#1a475b]" : "text-gray-600 hover:bg-gray-200"
 						}`}
 					>
@@ -72,7 +72,7 @@ function MyReservations() {
 					</button>
 					<button
 						onClick={() => setActiveTab("past")}
-						className={`px-6 py-2 rounded-md font-medium transition-colors text-nowrap ${
+						className={`px-4 sm:px-6 py-2 rounded-md font-medium transition-colors text-nowrap ${
 							activeTab === "past" ? "bg-[#b4e172] text-[#1a475b]" : "text-gray-600 hover:bg-gray-200"
 						}`}
 					>
