@@ -81,7 +81,7 @@ function PackageCard({ data }) {
 
 									<div className="flex items-center gap-4">
 										<span
-											className={`text-lg font-bold ${isFullyBooked(item.price) ? "text-red-600" : "text-gray-900"}`}
+											className={`text-lg text-nowrap font-bold ${isFullyBooked(item.price) ? "text-red-600" : "text-gray-900"}`}
 										>
 											{isFullyBooked(item.price) ? "Fully Booked" : item.price}
 										</span>
@@ -89,7 +89,7 @@ function PackageCard({ data }) {
 										{!isFullyBooked(item.price) && (
 											<button
 												onClick={() => handleParkHere(item)}
-												className="bg-[#b5e074] hover:bg-[#a3d165] text-[#18454f] px-6 py-2 rounded-lg font-medium transition-colors duration-200"
+												className="bg-[#b5e074] text-nowrap hover:bg-[#a3d165] text-[#18454f] px-6 py-2 rounded-lg font-medium transition-colors duration-200"
 											>
 												Park Here
 											</button>

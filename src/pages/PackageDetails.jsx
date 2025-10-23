@@ -125,44 +125,67 @@ function PackageDetails() {
 				</div>
 
 				<div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
-					<div className="flex flex-col lg:flex-row gap-8">
+					<div className="flex flex-col xl:flex-row gap-8">
 						{/* Main Content */}
 						<div className="flex-1">
 							{/* Quick Info Cards */}
-							<div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8">
+							<div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-10">
 								{/* Rating Card */}
-								<div className="bg-white rounded-xl shadow-lg p-4 lg:p-6 text-center">
-									<div className="flex justify-center mb-3">{renderStars(averageRating)}</div>
-									<p className="text-2xl lg:text-3xl font-bold text-gray-800 mb-1">{averageRating}</p>
-									<p className="text-gray-600">Customer Rating</p>
-									<p className="text-sm text-gray-500 mt-2">({totalReviews} reviews)</p>
+								<div className="group bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 text-center border border-gray-100 hover:border-[#b4e172]/30">
+									<div className="relative">
+										<div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center">
+											<FaStar className="text-white text-xs" />
+										</div>
+										<div className="flex justify-center mb-4">{renderStars(averageRating)}</div>
+									</div>
+									<div className="space-y-2">
+										<p className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#15445f] to-[#1a5a7a] bg-clip-text text-transparent mb-2">{averageRating}</p>
+										<p className="text-gray-700 font-medium text-lg">Customer Rating</p>
+										<div className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full">
+											<span className="text-sm text-gray-600 font-medium">{totalReviews} reviews</span>
+										</div>
+									</div>
 								</div>
 
 								{/* Service Type Card */}
-								<div className="bg-white rounded-xl shadow-lg p-4 lg:p-6">
-									<div className="flex items-center gap-3 mb-4">
-										<GiCarKey className="text-[#15445f]" size={20} />
-										<h3 className="text-lg font-semibold text-gray-800">Service Type</h3>
+								<div className="group bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border border-gray-100 hover:border-blue-200">
+									<div className="flex items-center gap-4 mb-6">
+										<div className="w-12 h-12 bg-gradient-to-r from-[#15445f] to-[#1a5a7a] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+											<GiCarKey className="text-white" size={24} />
+										</div>
+										<h3 className="text-xl font-bold text-gray-800">Service Type</h3>
 									</div>
-									<p className="text-gray-700">{type}</p>
-									{companyInfo.serviceType && <p className="text-sm text-gray-600 mt-1">{companyInfo.serviceType}</p>}
+									<div className="space-y-3">
+										<p className="text-gray-800 font-semibold text-lg">{type}</p>
+										{companyInfo.serviceType && (
+											<div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+												<p className="text-sm text-blue-700 font-medium">{companyInfo.serviceType}</p>
+											</div>
+										)}
+									</div>
 								</div>
 
 								{/* Company Info Card */}
-								<div className="bg-white rounded-xl shadow-lg p-4 lg:p-6">
-									<div className="flex items-center gap-3 mb-4">
-										<FaShieldAlt className="text-[#15445f]" size={18} />
-										<h3 className="text-lg font-semibold text-gray-800">Provider</h3>
+								<div className="group bg-gradient-to-br from-white to-green-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border border-gray-100 hover:border-green-200">
+									<div className="flex items-center gap-4 mb-6">
+										<div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+											<FaShieldAlt className="text-white" size={20} />
+										</div>
+										<h3 className="text-xl font-bold text-gray-800">Provider</h3>
 									</div>
-									<p className="text-gray-700">{companyInfo.companyName}</p>
-									<p className="text-sm text-gray-600 mt-1">{companyInfo.airportName}</p>
+									<div className="space-y-3">
+										<p className="text-gray-800 font-semibold text-lg">{companyInfo.companyName}</p>
+										<div className="bg-green-50 rounded-lg p-3 border border-green-100">
+											<p className="text-sm text-green-700 font-medium">{companyInfo.airportName}</p>
+										</div>
+									</div>
 								</div>
 							</div>
 
 							{/* Navigation Tabs */}
 							<div className="bg-white rounded-xl shadow-lg mb-8">
 								<div className="border-b border-gray-200">
-									<nav className="flex overflow-x-auto px-4 lg:px-6">
+									<nav className="flex flex-wrap sm:flex-nowrap overflow-x-auto px-4 lg:px-6">
 										{tabs.map((tab) => {
 											const { id, label, icon: Icon } = tab;
 											return (
