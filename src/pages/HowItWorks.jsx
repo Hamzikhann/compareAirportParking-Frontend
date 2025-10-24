@@ -1,7 +1,17 @@
 import React, { useEffect } from "react";
 import Navbar from "../sections/Navbar";
 import Footer from "../sections/Footer";
-import { FaSearch, FaCalendarAlt, FaCreditCard, FaShieldAlt, FaClock, FaDollarSign, FaHeadset, FaCheckCircle, FaArrowRight } from "react-icons/fa";
+import {
+	FaSearch,
+	FaCalendarAlt,
+	FaCreditCard,
+	FaShieldAlt,
+	FaClock,
+	FaDollarSign,
+	FaHeadset,
+	FaCheckCircle,
+	FaArrowRight
+} from "react-icons/fa";
 
 function HowItWorks() {
 	useEffect(() => {
@@ -13,19 +23,22 @@ function HowItWorks() {
 			number: "01",
 			icon: <FaSearch className="text-3xl text-white" />,
 			title: "Search & Compare",
-			description: "Enter your airport and dates to compare parking options from top providers. Find the best deals instantly with our smart comparison engine."
+			description:
+				"Enter your airport and dates to compare parking options from top providers. Find the best deals instantly with our smart comparison engine."
 		},
 		{
 			number: "02",
 			icon: <FaCalendarAlt className="text-3xl text-white" />,
 			title: "Book Your Spot",
-			description: "Select your preferred parking package, choose add-ons, and reserve your spot securely online with instant confirmation."
+			description:
+				"Select your preferred parking package, choose add-ons, and reserve your spot securely online with instant confirmation."
 		},
 		{
 			number: "03",
 			icon: <FaCreditCard className="text-3xl text-white" />,
 			title: "Pay & Park",
-			description: "Complete payment and receive confirmation. Arrive at the airport and park with ease - your spot is guaranteed."
+			description:
+				"Complete payment and receive confirmation. Arrive at the airport and park with ease - your spot is guaranteed."
 		}
 	];
 
@@ -99,20 +112,20 @@ function HowItWorks() {
 											{index < steps.length - 1 && (
 												<div className="hidden lg:block absolute top-20 left-full w-full h-0.5 bg-gradient-to-r from-[#b4e172] to-transparent transform translate-x-6"></div>
 											)}
-											
+
 											<div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 group-hover:transform group-hover:scale-105">
 												{/* Step Number */}
 												<div className="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-r from-[#b4e172] to-[#9dd65a] rounded-full flex items-center justify-center shadow-lg">
 													<span className="text-[#1a475b] font-bold text-lg">{step.number}</span>
 												</div>
-												
+
 												{/* Icon */}
 												<div className="flex justify-center mb-6 mt-4">
 													<div className="w-20 h-20 bg-gradient-to-r from-[#b4e172] to-[#9dd65a] rounded-full flex items-center justify-center shadow-lg">
 														{step.icon}
 													</div>
 												</div>
-												
+
 												{/* Content */}
 												<h3 className="text-2xl font-bold text-white mb-4 text-center">{step.title}</h3>
 												<p className="text-gray-200 text-center leading-relaxed">{step.description}</p>
@@ -136,7 +149,10 @@ function HowItWorks() {
 
 						<div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
 							{features.map((feature, index) => (
-								<div key={index} className="bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
+								<div
+									key={index}
+									className="bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-center"
+								>
 									<div className="w-16 h-16 bg-gradient-to-r from-[#b4e172] to-[#9dd65a] rounded-full flex items-center justify-center mx-auto mb-4">
 										{feature.icon}
 									</div>
@@ -151,12 +167,10 @@ function HowItWorks() {
 					<div className="mb-16 lg:mb-20">
 						<div className="grid lg:grid-cols-2 gap-12 items-center">
 							<div>
-								<h2 className="text-3xl lg:text-4xl font-bold text-[#1a454e] mb-6">
-									Your Journey Starts Here
-								</h2>
+								<h2 className="text-3xl lg:text-4xl font-bold text-[#1a454e] mb-6">Your Journey Starts Here</h2>
 								<p className="text-lg text-gray-600 mb-8 leading-relaxed">
-									Join thousands of satisfied customers who have discovered the convenience of hassle-free airport parking. 
-									Our platform connects you with trusted parking providers across major airports nationwide.
+									Join thousands of satisfied customers who have discovered the convenience of hassle-free airport
+									parking. Our platform connects you with trusted parking providers across major airports nationwide.
 								</p>
 								<div className="space-y-4">
 									<div className="flex items-center space-x-3">
@@ -224,11 +238,12 @@ function HowItWorks() {
 					<div className="bg-gradient-to-r from-[#1a454e] to-[#1a475b] rounded-3xl p-8 sm:p-10 lg:p-12 text-white text-center">
 						<h2 className="text-3xl lg:text-4xl font-bold mb-6">Ready to Find Your Perfect Parking Spot?</h2>
 						<p className="text-lg text-gray-200 mb-8 max-w-2xl mx-auto">
-							Start your journey with us today and discover why thousands of travelers trust Compare Airport Parking for their parking needs.
+							Start your journey with us today and discover why thousands of travelers trust Compare Airport Parking for
+							their parking needs.
 						</p>
 						<div className="flex flex-col sm:flex-row gap-4 justify-center">
 							<a
-								href="/packages"
+								href="/"
 								className="bg-[#b4e172] text-[#1a475b] px-8 py-4 rounded-xl font-semibold text-lg hover:bg-[#9dd65a] transition-colors duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
 							>
 								Start Your Search

@@ -14,7 +14,7 @@ const selectedPackageStore = create(
 		}),
 		{
 			name: "selected-package-storage",
-			storage: createJSONStorage(() => localStorage)
+			storage: createJSONStorage(() => sessionStorage)
 		}
 	)
 );

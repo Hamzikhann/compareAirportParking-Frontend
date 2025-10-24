@@ -6,7 +6,7 @@ import { Lock, Mail } from "lucide-react";
 import ApiService from "../services/ApiServices";
 import { setToken, setUserId, setSessionUser } from "../services/AuthService";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "../assets/compareparkinglogo.jpg";
 
 function AdminLogin() {
 	const [email, setEmail] = useState("");

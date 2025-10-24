@@ -17,7 +17,7 @@ function PackageCard({ data }) {
 	}
 
 	const formatTitle = (name) => {
-		return name.toLowerCase().includes("luton") ? "Park Pilot - Luton" : `Park Pilot - ${name}`;
+		return name.toLowerCase().includes("luton") ? `${name}` : `${name}`;
 	};
 
 	const handleParkHere = async (item) => {
@@ -81,7 +81,9 @@ function PackageCard({ data }) {
 
 									<div className="flex items-center gap-4">
 										<span
-											className={`text-lg text-nowrap font-bold ${isFullyBooked(item.price) ? "text-red-600" : "text-gray-900"}`}
+											className={`text-lg text-nowrap font-bold ${
+												isFullyBooked(item.price) ? "text-red-600" : "text-gray-900"
+											}`}
 										>
 											{isFullyBooked(item.price) ? "Fully Booked" : item.price}
 										</span>

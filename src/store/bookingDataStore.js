@@ -2,34 +2,34 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 const bookingDataStore = create(
-  persist(
-    (set) => ({
-      bookingData: {
-        airport: "",
-        startDate: "",
-        endDate: "",
-        startTime: "",
-        endTime: "",
-      },
+	persist(
+		(set) => ({
+			bookingData: {
+				airport: "",
+				startDate: "",
+				endDate: "",
+				startTime: "",
+				endTime: ""
+			},
 
-      setBookingData: (data) => set({ bookingData: data }),
+			setBookingData: (data) => set({ bookingData: data }),
 
-      clearBookingData: () =>
-        set({
-          bookingData: {
-            airport: "",
-            startDate: "",
-            endDate: "",
-            startTime: "",
-            endTime: "",
-          },
-        }),
-    }),
-    {
-      name: "booking-data-storage",
-      storage: createJSONStorage(() => localStorage),
-    }
-  )
+			clearBookingData: () =>
+				set({
+					bookingData: {
+						airport: "",
+						startDate: "",
+						endDate: "",
+						startTime: "",
+						endTime: ""
+					}
+				})
+		}),
+		{
+			name: "booking-data-storage",
+			storage: createJSONStorage(() => sessionStorage)
+		}
+	)
 );
 
 export default bookingDataStore;
