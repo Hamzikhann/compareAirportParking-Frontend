@@ -30,9 +30,15 @@ function Searchbar() {
 	const isFormValid = airport && checkInDateTime && checkOutDateTime;
 
 	const airports = [
-		{ label: "Denver Airport", value: "denver", icon: <FaPlaneUp size={18} /> },
-		{ label: "Seattle (SEA)", value: "seattle", icon: <FaPlaneUp size={18} /> },
-		{ label: "Stansted", value: "stansted", icon: <FaPlaneUp size={18} /> }
+		{ label: "Birmingham Airport", value: "Birmingham", icon: <FaPlaneUp size={18} /> },
+		{ label: "Bristol Airport", value: "Bristol", icon: <FaPlaneUp size={18} /> },
+		{ label: "Gatwick Airport", value: "Gatwick", icon: <FaPlaneUp size={18} /> },
+		{ label: "Heathrow Airport", value: "Heathrow", icon: <FaPlaneUp size={18} /> },
+		{ label: "Liverpool Airport", value: "Liverpool", icon: <FaPlaneUp size={18} /> },
+		{ label: "Luton Airport", value: "Luton", icon: <FaPlaneUp size={18} /> },
+		{ label: "Stansted Airport", value: "Stansted", icon: <FaPlaneUp size={18} /> },
+		{ label: "Manchester Airport", value: "Manchester", icon: <FaPlaneUp size={18} /> },
+		{ label: "Southend Airport", value: "Southend", icon: <FaPlaneUp size={18} /> }
 	];
 
 	const validateDates = () => {
